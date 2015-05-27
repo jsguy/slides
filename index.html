@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HC FEF</title>
+
+    <link rel="stylesheet" href="resource/revealjs/css/reveal.css">   
+    <link rel="stylesheet" href="resource/revealjs/css/theme/black.css" id="theme">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="resource/revealjs/lib/css/zenburn.css">
+
+    <script src="resource/knockout-3.2.0.js"></script>
+    <script src="resource/kotools.js"></script>
+    <script src="resource/jquery-1.11.2.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/syntaxify/prism.min.css">
+    <script type="text/javascript" src="resource/syntaxify/prism.min.js"></script>
+    <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/custom.css">
+</head>
+
+<body>
+<div class="reveal">
+
+<div class="slides">
+    <section>
+        <h1>
+HotelsCombined
+Front end forum
+</h1>
+    </section>
+    
+<section>
+    <h2>Talk 1: React – view components just got better!</h2>
+    <p class="speakerName">Bogdan Luca</p>
+    <p>
+        React is for the V in MVC – it makes no assumptions about the rest of your technology stack, we will look at two ways of creating a simple component – with and without JSX, for each of: props, state, lifecycle, and mixins. Then we look at Composing components, Just-in-time JSX Transformer vs Pre-process Transformer and finally how to integrate external plugins.
+    </p>
+</section>
+
+
+<section>
+    <h2>Talk 2: The misojs project: isomorphic JavaScript</h2>
+    <p class="speakerName">Mikkel Bergmann</p>
+    <p>
+        Misojs is an isomorphic JavaScript frameowrk based on mithril.
+    </p>
+</section>
+
+
+
+<section>
+    <h2>What is misojs?</h2>
+    <p>
+        Misojs     .
+    </p>
+</section>
+
+
+<section>
+    <h2>Variable naming</h2>
+    <p>
+        Imagine we have a DOM selector that we want to use in a query.
+    </p>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname1" type="text/syntaxify">
+                var x = "#foo";
+            </script>
+            <div data-syntaxify="#badname1" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname2" type="text/syntaxify">
+                var querySelector = "#foo";
+            </script>
+            <div data-syntaxify="#badname2" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        "x" is not descriptive of what we are trying to represent - it is better to use a more semantic name.
+    </p>
+</section>
+
+<section>
+    <h2>Variable naming</h2>
+    <p>
+        Imagine now that we have a complex method that finds the value of the "ID" field from the DOM, and the fires off a query to handle an "ajax" effect that shows some user details.
+    </p>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname3" type="text/syntaxify">
+                var queryDOMForIDThenGetJSONForUserAndShow = ...;
+            </script>
+            <div data-syntaxify="#badname3" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname4" type="text/syntaxify">
+                var handleNameRequest = ...;
+            </script>
+            <div data-syntaxify="#badname4" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        "queryDOMForIDThenGetJSONForUserAndShow" is a tad <i>too</i> descriptive of what we are trying to represent - in this case it is better to use something shorter. The <i>WHY</i> is always much more important than the <i>HOW</i>.
+    </p>
+</section>
+
+
+
+
+
+
+
+
+<section>
+    <h2>Naming conventions</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname25" type="text/syntaxify">
+var OBJect = {},
+    this_is_my_object = {},
+    cFunc = function() {},
+    u = new user({
+        name: 'Bob Parr'
+    });
+            </script>
+            <div data-syntaxify="#badname25" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname26" type="text/syntaxify">
+var obj = {},
+    myFuncDoesThis = function() {},
+    user = new User({
+        name: 'Bob Parr'
+    });
+            </script>
+            <div data-syntaxify="#badname26" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Use camelCase when naming objects, functions, and instances. Consistency is key to a pleasant coding environment.
+    </p>
+</section>
+
+
+
+
+
+
+
+<section>
+    <h2>Naming conventions</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname27" type="text/syntaxify">
+var user = function(args) {
+    this.name = args.name;
+};
+            </script>
+            <div data-syntaxify="#badname27" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname28" type="text/syntaxify">
+var User = function(args) {
+    this.name = args.name;
+};
+            </script>
+            <div data-syntaxify="#badname28" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Use <a href="http://c2.com/cgi/wiki?PascalCase" target="_blank">PascalCase</a> when naming constructors or classes. Consistency is key to a pleasant coding environment.
+    </p>
+</section>
+
+
+
+
+
+
+<section>
+    <h2>Constructor prototype</h2>
+    <p>
+        Say you have:
+    </p>
+    <script id="constExample" type="text/syntaxify">
+function Dalek() {
+    console.log('EXTERMINATE!');
+}
+    </script>
+    <div data-syntaxify="#constExample" data-syntaxify-language="js"></div>
+
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname29" type="text/syntaxify">
+Dalek.prototype = {
+    exterminate: function() {
+        console.log('EXTERMINATE!');
+    }
+};
+            </script>
+            <div data-syntaxify="#badname29" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname30" type="text/syntaxify">
+Dalek.prototype.exterminate = function() {
+    console.log('EXTERMINATE!');
+};
+            </script>
+            <div data-syntaxify="#badname30" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        If you overwrite the prototype, you break the ability to inherit.
+    </p>
+</section>
+
+
+
+
+
+
+
+
+<section>
+    <h2>Variable declaration</h2>
+    <p>
+        When declaring variables, always use one "var" keyword per function and declare each of the variables on a new line, with the unassigned variables last.
+    </p>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname5" type="text/syntaxify">
+who_you_gonna_call = "Bill Murray", i, 
+length, protonPack = getProtonPack();
+            </script>
+            <div data-syntaxify="#badname5" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname6" type="text/syntaxify">
+var whoYouGonnaCall = "Bill Murray", 
+    protonPack = getProtonPack(),
+    length, 
+    i;
+            </script>
+            <div data-syntaxify="#badname6" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Having undeclared variables last means you can easily assign them based on previous variables should the need arise, and declaring global variables mean you can easily clash with other declarations, so don't do that.
+    </p>
+</section>
+
+
+<section>
+    <h2>Commenting</h2>
+    <p>
+        <span class="big">"Good code is self-explainitory!".</span><br/>
+        What a load of cods-wallop - most code needs at least a little explaination, no matter how well named your functions are or how well written your code is.
+    </p>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="comment1" type="text/syntaxify">
+var discoverMeaningOfLife = function(){...}
+            </script>
+            <div data-syntaxify="#comment1" data-syntaxify-language="JavaScript"></div>
+        </div>
+        <div class="compareRight">
+            <script id="comment2" type="text/syntaxify">
+//  Implement D.Adams-matrix module
+//  and pipe results to big-data
+//  cluster, so we can report
+//  the result in Excel.
+var discoverMeaningOfLife = function(){...}
+            </script>
+            <div data-syntaxify="#comment2" data-syntaxify-language="JavaScript"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Everyone thinks they might know <i>WHAT</i> you might want to do, however we need to know <i>WHY</i>. It is nigh on impossible to convey complex intention through code.
+    </p>
+</section>
+
+
+
+<section>
+    <h2>Commenting</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname7" type="text/syntaxify">
+//  Iterate over the items
+for(i in items) {
+            </script>
+            <div data-syntaxify="#badname7" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname8" type="text/syntaxify">
+//  Extract item details
+for(i in items) {
+            </script>
+            <div data-syntaxify="#badname8" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Everyone knows that you're iterating over the items, we need to know <i>WHY</i>.
+    </p>
+</section>
+
+
+<section>
+    <h2>Commenting</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname9" type="text/syntaxify">
+//  TODO: Fix this
+            </script>
+            <div data-syntaxify="#badname9" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname10" type="text/syntaxify">
+//  TODO: Allow option for item
+            </script>
+            <div data-syntaxify="#badname10" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        When you make a "TODO" or "FIXME" comment, be sure to say what needs fixing, otherwise it is only useful for as long as you can remember what it was.
+    </p>
+</section>
+
+
+
+
+<section>
+    <h2>Commenting</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname11" type="text/syntaxify">
+this.active(true);  //  Activate this tab
+            </script>
+            <div data-syntaxify="#badname11" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname12" type="text/syntaxify">
+//  Activate this tab
+this.active(true);
+            </script>
+            <div data-syntaxify="#badname12" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        It can be quite difficult to read comments at the end of lines, so put them on new lines, and prefix with an empty line if possible
+    </p>
+</section>
+
+
+
+<section>
+    <h2>Use concise notation</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname15" type="text/syntaxify">
+var lunch = new Array();
+lunch[0] = 'Fried chicken burger';
+lunch[1] = 'Salad with sprouts';
+            </script>
+            <div data-syntaxify="#badname15" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname16" type="text/syntaxify">
+var lunch = [
+    'Fried chicken burger',
+    'Salad with sprouts'
+];
+            </script>
+            <div data-syntaxify="#badname16" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        These both do the same, but the 2nd is much clearer, and there are <a href="http://stackoverflow.com/a/1095338" target="_blank">some other rather loose arguments</a> for using this notation.
+    </p>
+</section>
+
+
+
+
+<section>
+    <h2>Use concise notation</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname17" type="text/syntaxify">
+if(v){
+    var x = v;
+} else {
+    var x = 10;
+}
+            </script>
+            <div data-syntaxify="#badname17" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname18" type="text/syntaxify">
+var x = v || 10;
+            </script>
+            <div data-syntaxify="#badname18" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Easier to read, does the same.
+    </p>
+</section>
+
+
+
+
+
+<section>
+    <h2>Use concise notation</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname19" type="text/syntaxify">
+var direction;
+if(x > 100){
+   direction = 1;
+} else {
+   direction = -1;
+}
+            </script>
+            <div data-syntaxify="#badname19" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname20" type="text/syntaxify">
+var direction = (x > 100)? 1 : -1;
+            </script>
+            <div data-syntaxify="#badname20" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Easier to read, does the same.
+    </p>
+</section>
+
+
+
+
+
+
+<section>
+    <h2>Using correct tech</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname13" type="text/syntaxify">
+//  Red error border
+$('.error').css({border: '1px solid red'});
+            </script>
+            <div data-syntaxify="#badname13" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname14" type="text/syntaxify">
+//  Red error border
+.error { border: 1px solid red }
+            </script>
+            <div data-syntaxify="#badname14" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        JavaScript isn't the best technology for everything - styling belongs in a style sheet. Just because you can, doesn't mean you should.
+    </p>
+</section>
+
+
+
+
+
+
+<section>
+    <h2>Coercion</h2>
+    <p>
+        Coercion (or "type coercion") is when one type of value is converted to an equivelent value of a different type, or "coerced".
+    </p>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname21" type="text/syntaxify">
+var value = "08";
+var val = parseInt(value);
+// 0
+            </script>
+            <div data-syntaxify="#badname21" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname22" type="text/syntaxify">
+var value = "08";
+var val = parseInt(value, 10);
+// 8
+            </script>
+            <div data-syntaxify="#badname22" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        Parsing "08" without a radix gives us "0" as, for some reason, JavaScript uses octal radix as default, so always add the radix! Note: parseInt isn't really all that efficient, you could use a bit shift for perfomance, just be sure to comment it correctly!
+    </p>
+
+    <script id="bitshiftOptimisation" type="text/syntaxify">
+//  parseInt is too slow here, use bit-shift to speed things up.
+var val = value >> 0;
+    </script>
+    <div data-syntaxify="#bitshiftOptimisation" data-syntaxify-language="js"></div>
+
+
+</section>
+
+
+
+<section>
+    <h2>Coercion</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname23" type="text/syntaxify">
+var isReady = new Boolean(status);
+            </script>
+            <div data-syntaxify="#badname23" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname24" type="text/syntaxify">
+var isReady = !!status;
+            </script>
+            <div data-syntaxify="#badname24" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        No need to create a new boolean object if you just want to know the boolean value of a variable.
+    </p>
+</section>
+
+
+
+<section>
+    <h2>Coercion</h2>
+    <div class="compareJS">
+        <div class="compareLeft">
+            <script id="badname31" type="text/syntaxify">
+if(blah == yadayada) {...}
+            </script>
+            <div data-syntaxify="#badname31" data-syntaxify-language="js"></div>
+        </div>
+        <div class="compareRight">
+            <script id="badname32" type="text/syntaxify">
+if(blah === yadayada) {...}
+            </script>
+            <div data-syntaxify="#badname32" data-syntaxify-language="js"></div>
+        </div>
+    </div>
+
+    <h3>Why is this a good idea?</h3>
+    <p>
+        When checking if something is equal to something else, always use triple equals, this prevents type-coersion from hapening, so you don't have issues with:
+    </p>
+    <script id="avoidCoersion" type="text/syntaxify">
+'' == '0'           // false
+0 == ''             // true
+0 == '0'            // true
+false == 'false'    // false
+false == '0'        // true
+' \t\r\n ' == 0     // true
+    </script>
+    <div data-syntaxify="#avoidCoersion" data-syntaxify-language="js"></div>
+    <p>
+        They are all false when you test with "==="
+    </p>
+
+</section>
+
+
+<!-- http://www.thinkful.com/learn/javascript-best-practices-1/Make-it-Understandable -->
+<!-- https://github.com/airbnb/javascript -->
+
+<section>
+    <h2>References</h2> 
+    <ul>
+        <li><a href="https://github.com/airbnb/javascript" target="_blank">AirBNB JavaScript guide ()</a></li>
+        <li><a href="http://www.thinkful.com/learn/javascript-best-practices-1/Make-it-Understandable" target="_blank">Thinkful JS best practice</a></li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Talk 2: How to be a complete 4r$3#013 with bad JavaScript.</h2>
+    <p class="textleft speakerName">Xuanyi Chew</p>
+    <p>
+        Chewy talks about excerpts from his book: "If you have ever seen WTF-worthy JavaScript code (and any JavaScript dev worth their salt would have encountered at least one) and wondered wtf is happening, this book is for you."
+    </p>
+    <p>
+        <a href="Underhanded%20JavaScript%20HC.pptx" target="_blank">Click for the PowerPoint presentation</a>
+    </p>
+</section>
+
+
+
+
+
+<section>
+    <h2>Site of the month: VelocityJS</h2>
+    <ul>
+        <li> <a target="_blank" href="http://velocityjs.org/">http://velocityjs.org/</a> - Velocity is a jQuery plugin that re-implements $.animate() to produce significantly greater performance (making Velocity also faster than CSS animation libraries) while including new features to improve UI animation workflow.</li>
+        
+        <li> <a target="_blank" href="http://codepen.io/collection/tIjGb/">List of demos</a></li>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Thanks for coming!</h2>
+    <p>
+        If you are interested in presenting a lightning talk, please let me know for next month.
+    </p>
+</section>
+
+</div>
+
+    </div>
+
+    <script src="resource/revealjs/lib/js/head.min.js"></script>
+    <script src="resource/revealjs/js/reveal.js"></script>
+
+    <script>
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                progress: false,
+                history: true,
+                center: true,
+                // available themes are in /css/theme
+                theme: Reveal.getQueryHash().theme, 
+                transition: Reveal.getQueryHash().transition || 'default',
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'resource/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'resource/revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'resource/revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'resource/revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'resource/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'resource/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });     
+
+            // Reveal.addEventListener( 'slidechanged', function( event ) {
+            //  console.log(event.previousSlide, event.currentSlide, event.indexh, event.indexv);
+            // } );
+    </script>
+
+</body>
+</html> 
