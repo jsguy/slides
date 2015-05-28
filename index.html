@@ -52,9 +52,16 @@
     <script src="resource/jquery-1.11.2.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="resource/syntaxify/prism.min.css">
+
+    <link rel="stylesheet" type="text/css" href="resource/prism.annotate/prism.annotate.css">
+
+
     <script type="text/javascript" src="resource/syntaxify/prism.min.js" data-manual></script>
+
+    <script type="text/javascript" src="resource/prism.annotate/prism.annotate.js"></script>
+
+
     <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
-    <script type="text/javascript" src="resource/jquery.hoverintent.js"></script>
 
     <link rel="stylesheet" type="text/css" href="resource/custom.css">
 </head>
@@ -136,169 +143,9 @@ codeHints = {
 -->
 
 
-<style>
-
-.tooltip {
-    position:absolute;
-    border:1px solid #333;
-    background-color:#fff;
-    border-radius:5px;
-    padding:10px;
-    color:#161616;
-    font-size:12px;
-    font-family: sans-serif;
-    z-index: 100000;
-}
-
-/* 
-    ok, for some reason lea thought it would be fun to limit
-    access to the pointer events. It took more time than it
-    should to find this problem. :embarrassment:
- */
-.line-highlight {
-    pointer-events: inherit;
-}
-
-</style>
 
 
 <script>
-
-//  Code annotation plugin
-(function(){
-
-if(!window.Prism) {
-    return;
-}
-
-function $$(expr, con) {
-    return Array.prototype.slice.call((con || document).querySelectorAll(expr));
-}
-
-function hasClass(element, className) {
-  className = " " + className + " ";
-  return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1
-}
-
-var CRLF = crlf = /\r?\n|\r/g;
-    
-function annotateLines(pre, lines, classes) {
-    var ranges = lines.replace(/\s+/g, '').split(','),
-        offset = +pre.getAttribute('data-annotations-offset') || 0,
-        allLines = lines.split("|"),
-        tmp, range, text;
-
-    offset -= 1;
-    
-    var lineHeight = parseFloat(getComputedStyle(pre).lineHeight);
-
-
-    for(var j = 0; j < allLines.length; j += 1) {
-        tmp = allLines[j].split("`");
-        range = tmp[0];
-        text = tmp[1];
-
-        range = range.split('-');
-
-        var start = +range[0],
-            end = +range[1] || start;
-        
-        var line = document.createElement('div');
-        
-        //  Add line breaks
-        line.textContent = Array(end - start + 2).join(' \r\n');
-        $(line).addClass((classes || '') + ' line-highlight hint');
-
-        //  Add hint text and set offset
-        line.setAttribute('data-hint', text);
-        line.style.top = (start - offset - 1) * lineHeight + 'px';
-
-        $(pre).append(line);
-
-
-
-        //  Tool tip interaction
-        $(line).on('mouseenter', function(){
-            var hint = $(this).data('hint');
-
-            $('<p class="tooltip"></p>')
-                .html(hint)
-                .appendTo('body')
-                .fadeIn('slow');
-        });
-
-        $(line).on('mouseleave', function(){
-            $('.tooltip')
-                .remove();
-        });
-
-        $(line).on('mousemove', function(e){
-            var x = e.pageX + 20,
-                y = e.pageY + 10;
-            $('.tooltip')
-                .css({ top: y, left: x })
-        });
-
-
-
-
-
-    }
-}
-
-Prism.hooks.add('after-highlight', function(env) {
-    var pre = env.element.parentNode;
-    //var pre = env.element;
-    var lines = pre && pre.getAttribute('data-annotations');
-    
-    if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
-        return;
-    }
-    
-    $$('.line-highlight', pre).forEach(function (line) {
-        line.parentNode.removeChild(line);
-    });
-    
-    annotateLines(pre, lines);
-});
-
-})();
-
-
-
-    // Tooltips
-    // $('.slides').on(".hint:hover", function(){
-
-    //     console.log('hover', this);
-
-    //     // Hover over code
-    //     var title = $(this).attr('title');
-    //     $(this).data('tipText', title).removeAttr('title');
-    //     $('<p class="tooltip"></p>')
-    //     .text(title)
-    //     .appendTo('body')
-    //     .fadeIn('slow');
-    // }, function() {
-    //     // Hover out code
-    //     $(this).attr('title', $(this).data('tipText'));
-    //     $('.tooltip').remove();
-    // }).mousemove(function(e) {
-    //     var mousex = e.pageX + 20; //Get X coordinates
-    //     var mousey = e.pageY + 10; //Get Y coordinates
-    //     $('.tooltip')
-    //     .css({ top: mousey, left: mousex })
-    // });
-
-
-    // $('.hint').on('mouseenter', function(){
-    //     console.log('over', this);
-    // });
-
-
-
-
-
-
 
 </script>
 
