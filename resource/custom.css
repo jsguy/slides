@@ -1,6 +1,6 @@
 /* Various custom style overrides */
 pre[class*="language-"] { border-radius: 2px; }
-pre.syntaxifyCode { margin-left: 0; padding-left: 0; }
+pre.syntaxifyCode { margin-left: 0; }
 pre.syntaxifyCode code { padding: 1em; border-radius: 0.5em;}
 .reveal pre code { background: #333; }
 .reveal h3 { text-align: left; padding-top: 0.3em; clear: both; }
