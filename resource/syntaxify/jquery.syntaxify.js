@@ -34,7 +34,7 @@
 						$.trim(escapeHtml($(selector).html()))+
 					'</code>'+
 				'</pre>');
-			Prism.highlightElement($el.find('pre.syntaxifyCode').get(0));
+			Prism.highlightElement($el.find('pre.syntaxifyCode code').get(0));
 		});
 	};
 

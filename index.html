@@ -54,6 +54,7 @@
     <link rel="stylesheet" type="text/css" href="resource/syntaxify/prism.min.css">
     <script type="text/javascript" src="resource/syntaxify/prism.min.js" data-manual></script>
     <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
+    <script type="text/javascript" src="resource/jquery.hoverintent.js"></script>
 
     <link rel="stylesheet" type="text/css" href="resource/custom.css">
 </head>
@@ -116,7 +117,7 @@ module.exports.index = {
 };
     </script>
     <div data-syntaxify="#misoTodo1" data-syntaxify-language="javascript"
-        data-annotations="2-4`The controller must return this|
+        data-annotations="2-4`The controller must return 'this'.<br/>We do that, so there is a pointer that miso can interact with to get at the controller|
         6`The view can return HTML or plain text">
     </div>
 
@@ -138,14 +139,24 @@ codeHints = {
 <style>
 
 .tooltip {
-    display:none;
     position:absolute;
     border:1px solid #333;
-    background-color:#161616;
+    background-color:#fff;
     border-radius:5px;
     padding:10px;
-    color:#fff;
-    font-size:12px Arial;
+    color:#161616;
+    font-size:12px;
+    font-family: sans-serif;
+    z-index: 100000;
+}
+
+/* 
+    ok, for some reason lea thought it would be fun to limit
+    access to the pointer events. It took more time than it
+    should to find this problem. :embarrassment:
+ */
+.line-highlight {
+    pointer-events: inherit;
 }
 
 </style>
@@ -196,30 +207,48 @@ function annotateLines(pre, lines, classes) {
         
         //  Add line breaks
         line.textContent = Array(end - start + 2).join(' \r\n');
-        line.className = (classes || '') + ' line-highlight hint';
+        $(line).addClass((classes || '') + ' line-highlight hint');
 
-        //  Add hint text
+        //  Add hint text and set offset
         line.setAttribute('data-hint', text);
-
         line.style.top = (start - offset - 1) * lineHeight + 'px';
 
-        console.log('add line', start, end, line);
+        $(pre).append(line);
 
-        (pre.querySelector('code') || pre).appendChild(line);
 
-        //  TODO: Hover fails!
-        $(".hint").mouseenter(function(e){
-            console.log(e.currentTarget);
-            //console.log('over', this);
+
+        //  Tool tip interaction
+        $(line).on('mouseenter', function(){
+            var hint = $(this).data('hint');
+
+            $('<p class="tooltip"></p>')
+                .html(hint)
+                .appendTo('body')
+                .fadeIn('slow');
         });
+
+        $(line).on('mouseleave', function(){
+            $('.tooltip')
+                .remove();
+        });
+
+        $(line).on('mousemove', function(e){
+            var x = e.pageX + 20,
+                y = e.pageY + 10;
+            $('.tooltip')
+                .css({ top: y, left: x })
+        });
+
+
+
 
 
     }
 }
 
 Prism.hooks.add('after-highlight', function(env) {
-    //var pre = env.element.parentNode;
-    var pre = env.element;
+    var pre = env.element.parentNode;
+    //var pre = env.element;
     var lines = pre && pre.getAttribute('data-annotations');
     
     if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
@@ -238,30 +267,32 @@ Prism.hooks.add('after-highlight', function(env) {
 
 
     // Tooltips
-    /*
-    $('.slides').on(".hint:hover", function(){
+    // $('.slides').on(".hint:hover", function(){
 
-        console.log('hover', this);
+    //     console.log('hover', this);
 
-        // Hover over code
-        var title = $(this).attr('title');
-        $(this).data('tipText', title).removeAttr('title');
-        $('<p class="tooltip"></p>')
-        .text(title)
-        .appendTo('body')
-        .fadeIn('slow');
-    }, function() {
-        // Hover out code
-        $(this).attr('title', $(this).data('tipText'));
-        $('.tooltip').remove();
-    }).mousemove(function(e) {
-        var mousex = e.pageX + 20; //Get X coordinates
-        var mousey = e.pageY + 10; //Get Y coordinates
-        $('.tooltip')
-        .css({ top: mousey, left: mousex })
-    });
-*/
+    //     // Hover over code
+    //     var title = $(this).attr('title');
+    //     $(this).data('tipText', title).removeAttr('title');
+    //     $('<p class="tooltip"></p>')
+    //     .text(title)
+    //     .appendTo('body')
+    //     .fadeIn('slow');
+    // }, function() {
+    //     // Hover out code
+    //     $(this).attr('title', $(this).data('tipText'));
+    //     $('.tooltip').remove();
+    // }).mousemove(function(e) {
+    //     var mousex = e.pageX + 20; //Get X coordinates
+    //     var mousey = e.pageY + 10; //Get Y coordinates
+    //     $('.tooltip')
+    //     .css({ top: mousey, left: mousex })
+    // });
 
+
+    // $('.hint').on('mouseenter', function(){
+    //     console.log('over', this);
+    // });
 
 
 
