@@ -1,5 +1,26 @@
+/*
+    Code annotation plugin for prism
 
-//  Code annotation plugin
+    Example usage (with jquery.syntaxify):
+
+        <script id="misoTodo1" type="text/syntaxify">
+module.exports.index = {
+    controller: function(params) {
+        return this;
+    },
+    view: function(ctrl) {
+        return "TODO";
+    }
+};
+        </script>
+        <div data-syntaxify="#misoTodo1" data-syntaxify-language="javascript"
+            data-annotations="2-4`The controller must return 'this'.<br/>We do that, so there is a pointer that miso can interact with to get at the controller|
+            6`The view can return HTML or plain text">
+        </div>
+
+    TODO: Example without syntaxify.    
+
+*/
 (function(){
 
 if(!window.Prism) {
