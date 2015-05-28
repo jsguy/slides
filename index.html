@@ -103,7 +103,7 @@ Front end forum
 
 
 <section>
-    <h2>Anatomy of a misojs app</h2>
+    <h2>Anatomy of a miso app</h2>
 
     <script id="misoTodo1" type="text/syntaxify">
 module.exports.index = {
@@ -116,8 +116,8 @@ module.exports.index = {
 };
     </script>
     <div data-syntaxify="#misoTodo1" data-syntaxify-language="javascript"
-        data-annotations="2-4,The controller must return this|
-        6,The view can return HTML or plain text">
+        data-annotations="2-4`The controller must return this|
+        6`The view can return HTML or plain text">
     </div>
 
 
@@ -134,59 +134,26 @@ codeHints = {
 
 -->
 
+
+<style>
+
+.tooltip {
+    display:none;
+    position:absolute;
+    border:1px solid #333;
+    background-color:#161616;
+    border-radius:5px;
+    padding:10px;
+    color:#fff;
+    font-size:12px Arial;
+}
+
+</style>
+
+
 <script>
 
-var codeHints = [
-    { range: "2:4", text: "The controller must return `this`." }
-];
-
-var addCodeHints = function(codeHint) {
-    //  Bits borrowed from: https://github.com/isagalaev/highlight.js/pull/71
-    $('#exampleCode pre>code').each(function() {
-        var current = $(this),
-            lineStart = parseInt(current.data('line-start')),
-            lineFocus = parseInt(current.data('line-focus')),
-            items = current.html().split("\n"),
-            total = items.length,
-            result = '';
-
-        for (var i = 0; i < total; i++) {
-            var line = items[i];
-            for(var c = 0; c < codeHint.length; c += 1) {
-                var ch = codeHint[c];
-                if(ch.start == (i + 1)) {
-                    line = "<div class='codeHint'>" + line;
-                }
-                if(ch.end == (i + 1)) {
-                    line = line +
-                        "<div class='codeHintBox'><span class='text'>" +
-                        ch.text +
-                        "</span></div>" +
-                        "</div>";
-                }
-            }
-
-            result += line + "\n";
-        }
-
-        var items = current.empty().append(result);
-    });
-    
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//  Code annotation plugin
 (function(){
 
 if(!window.Prism) {
@@ -204,106 +171,96 @@ function hasClass(element, className) {
 
 var CRLF = crlf = /\r?\n|\r/g;
     
-function highlightLines(pre, lines, classes) {
+function annotateLines(pre, lines, classes) {
     var ranges = lines.replace(/\s+/g, '').split(','),
-        offset = +pre.getAttribute('data-line-offset') || 0;
+        offset = +pre.getAttribute('data-annotations-offset') || 0,
+        allLines = lines.split("|"),
+        tmp, range, text;
+
+    offset -= 1;
     
     var lineHeight = parseFloat(getComputedStyle(pre).lineHeight);
 
-    for (var i=0, range; range = ranges[i++];) {
+
+    for(var j = 0; j < allLines.length; j += 1) {
+        tmp = allLines[j].split("`");
+        range = tmp[0];
+        text = tmp[1];
+
         range = range.split('-');
-                    
+
         var start = +range[0],
             end = +range[1] || start;
         
         var line = document.createElement('div');
         
+        //  Add line breaks
         line.textContent = Array(end - start + 2).join(' \r\n');
-        line.className = (classes || '') + ' line-highlight';
+        line.className = (classes || '') + ' line-highlight hint';
 
-    //if the line-numbers plugin is enabled, then there is no reason for this plugin to display the line numbers
-    if(!hasClass(pre, 'line-numbers')) {
-      line.setAttribute('data-start', start);
-
-      if(end > start) {
-        line.setAttribute('data-end', end);
-      }
-    }
+        //  Add hint text
+        line.setAttribute('data-hint', text);
 
         line.style.top = (start - offset - 1) * lineHeight + 'px';
 
-    console.log('add line', line);
+        console.log('add line', start, end, line);
 
-    //allow this to play nicely with the line-numbers plugin
-    if(hasClass(pre, 'line-numbers')) {
-      //need to attack to pre as when line-numbers is enabled, the code tag is relatively which screws up the positioning
-      pre.appendChild(line);
-    } else {
-      (pre.querySelector('code') || pre).appendChild(line);
-    }
+        (pre.querySelector('code') || pre).appendChild(line);
+
+        //  TODO: Hover fails!
+        $(".hint").mouseenter(function(e){
+            console.log(e.currentTarget);
+            //console.log('over', this);
+        });
+
+
     }
 }
-
-function applyHash() {
-    var hash = location.hash.slice(1);
-    
-    // Remove pre-existing temporary lines
-    $$('.temporary.line-highlight').forEach(function (line) {
-        line.parentNode.removeChild(line);
-    });
-    
-    var range = (hash.match(/\.([\d,-]+)$/) || [,''])[1];
-    
-    if (!range || document.getElementById(hash)) {
-        return;
-    }
-    
-    var id = hash.slice(0, hash.lastIndexOf('.')),
-        pre = document.getElementById(id);
-        
-    if (!pre) {
-        return;
-    }
-    
-    if (!pre.hasAttribute('data-line')) {
-        pre.setAttribute('data-line', '');
-    }
-
-    highlightLines(pre, range, 'temporary ');
-
-    document.querySelector('.temporary.line-highlight').scrollIntoView();
-}
-
-var fakeTimer = 0; // Hack to limit the number of times applyHash() runs
 
 Prism.hooks.add('after-highlight', function(env) {
     //var pre = env.element.parentNode;
     var pre = env.element;
-    var lines = pre && pre.getAttribute('data-line');
+    var lines = pre && pre.getAttribute('data-annotations');
     
     if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
         return;
     }
     
-    clearTimeout(fakeTimer);
-    
     $$('.line-highlight', pre).forEach(function (line) {
         line.parentNode.removeChild(line);
     });
     
-    highlightLines(pre, lines);
-    
-    fakeTimer = setTimeout(applyHash, 1);
+    annotateLines(pre, lines);
 });
-
-addEventListener('hashchange', applyHash);
 
 })();
 
 
 
+    // Tooltips
+    /*
+    $('.slides').on(".hint:hover", function(){
 
+        console.log('hover', this);
 
+        // Hover over code
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="tooltip"></p>')
+        .text(title)
+        .appendTo('body')
+        .fadeIn('slow');
+    }, function() {
+        // Hover out code
+        $(this).attr('title', $(this).data('tipText'));
+        $('.tooltip').remove();
+    }).mousemove(function(e) {
+        var mousex = e.pageX + 20; //Get X coordinates
+        var mousey = e.pageY + 10; //Get Y coordinates
+        $('.tooltip')
+        .css({ top: mousey, left: mousex })
+    });
+*/
 
 
 

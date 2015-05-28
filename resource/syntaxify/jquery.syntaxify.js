@@ -22,14 +22,14 @@
 
 		$this.each(function(idx,el){
 			var $el = $(el),
-				annotations = "";
+				annotations;
 
 			if($el.data('annotations')) {
 				annotations = $el.data('annotations')
 			}
 
 			$el.html(
-				'<pre class="syntaxifyCode language-'+options.language+'" '+annotations+'>'+
+				'<pre class="syntaxifyCode language-'+options.language+'" '+(annotations? 'data-annotations="' + annotations + '"': "")+'>'+
 					'<code class="language-'+options.language+'">'+
 						$.trim(escapeHtml($(selector).html()))+
 					'</code>'+
