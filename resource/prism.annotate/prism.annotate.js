@@ -1,6 +1,11 @@
 /*
     Code annotation plugin for prism
 
+
+    TODO: Needs a cleanup!
+    TODO: Shouldn't need to use jQuery
+
+
     Example usage (with jquery.syntaxify):
 
         <script id="misoTodo1" type="text/syntaxify">
@@ -29,11 +34,6 @@ if(!window.Prism) {
 
 function $$(expr, con) {
     return Array.prototype.slice.call((con || document).querySelectorAll(expr));
-}
-
-function hasClass(element, className) {
-  className = " " + className + " ";
-  return (" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1
 }
 
 var CRLF = crlf = /\r?\n|\r/g;
@@ -67,31 +67,31 @@ function annotateLines(pre, lines, classes) {
 
         //  Add hint text and set offset
         line.setAttribute('data-hint', text);
-        line.style.top = (start - offset - 1) * lineHeight + 'px';
+        //  TODO: Work out why this is not ligning up properly - probably needs to take into 
+        //  account margin and padding, etc...
+        line.style.top = (((start - offset - 1) * lineHeight) - lineHeight * 0.07) + 'px';
 
         $(pre).append(line);
-
-
 
         //  Tool tip interaction
         $(line).on('mouseenter', function(){
             var hint = $(this).data('hint');
 
-            $('<p class="annotateTooltip"></p>')
+            $('<p class="annotate-tooltip"></p>')
                 .html(hint)
                 .appendTo('body')
                 .fadeIn('slow');
         });
 
         $(line).on('mouseleave', function(){
-            $('.annotateTooltip')
+            $('.annotate-tooltip')
                 .remove();
         });
 
         $(line).on('mousemove', function(e){
             var x = e.pageX + 20,
                 y = e.pageY + 10;
-            $('.annotateTooltip')
+            $('.annotate-tooltip')
                 .css({ top: y, left: x })
         });
 
