@@ -63,10 +63,10 @@ Front end forum
         ## What is misojs?
 
         * Isomorphic: the same code is run on both the server and client.
-        * Data store agnostic: use whatever data storage you like.
         * Single page app: with SEO working out of the box.
-        * Tiny JS clientside footprint - much less than 25kb (gzip+min).
+        * Tiny JS clientside footprint - less than 25kb (gzip+min).
         * Live code reloading whilst developing.
+        * Data store agnostic: use whatever data storage you like.
         * Based on Express, Browserify, Mithril and Nodemon
     </script>
 </section>
@@ -75,20 +75,141 @@ Front end forum
 <section>
     <h2>Anatomy of a miso app</h2>
 
+    <p>
+        A miso app is defined using MVC entities, which are complete MVC components by themselves.
+    </p>
+
     <script id="misoTodo1" type="text/syntaxify">
 module.exports.index = {
-    controller: function(params) {
+    models: {},
+    controller: function() {
         return this;
     },
-    view: function(ctrl) {
+    view: function() {
         return "TODO";
     }
 };
     </script>
     <div data-syntaxify="#misoTodo1" data-syntaxify-language="javascript"
-        data-annotations="2-4`The controller must return 'this'.<br/>We do that, so there is a pointer that miso can interact with to get at the controller and allow it to work isomorphically|
-        6`The view can return HTML or plain text">
+        data-annotations="
+            2`Any required models should be defined here|
+            3-5`The controller must return 'this'.<br/>We do that, so there is a pointer that miso can interact with to get at the controller and allow it to work isomorphically|
+            7`The view can return a mithril object or plain text
+        ">
     </div>
+
+    <p>
+        This is a somewhat contrived (however valid) MVC entity - defining your app in this manner allows miso to make it isomorphic.
+    </p>
+
+</section>
+
+<section>
+    <h2>Models</h2>
+
+    <p>
+        Miso is able to define concrete model structures, they can be plain js objects, and contain mithril properties, for example:
+    </p>
+
+    <script id="misoTodo2" type="text/syntaxify">
+module.exports.index = {
+    models: {
+        todo: function(data){
+            this.text = data.text;
+            this.done = m.prop(data.done == "false"? false: data.done);
+            this._id = data._id;
+        }
+    },
+    ...
+}
+    </script>
+    <div data-syntaxify="#misoTodo2" data-syntaxify-language="javascript"
+        data-annotations="
+            4`'text' is a plain string attribute, it simply contains a string|
+            5`The 'done' attribute is a mithril property, it is exposed as a getter/setter, and here we allow the string 'false' to be set as a proper false value.
+        ">
+    </div>
+
+    <p>
+        Defining your models in this manner allows miso to use the model in APIs and cleanly expose them for unit testing. You can have more than one model per MVC entity.
+    </p>
+
+</section>
+
+<section>
+    <h2>Controller</h2>
+
+    <p>
+        Miso controllers are simply functions that return a pointer to 'this', for example:
+    </p>
+
+    <script id="misoTodo3" type="text/syntaxify">
+controller: function() {
+    var myTodos = [{text: "Learn miso"}, {text: "Build miso app"}];
+    this.list = Object.keys(myTodos).map(function(key) {
+        return new self.models.todo(myTodos[key]);
+    });
+    return this;
+}
+    </script>
+    <div data-syntaxify="#misoTodo3" data-syntaxify-language="javascript"
+        data-annotations="
+            2`Hard coded example data|
+            3`Here we create a list of todo models
+        ">
+    </div>
+
+    <p>
+        Defining your controller in this manner allows miso to enable it to run in an isomorphic manner.
+    </p>
+
+</section>
+
+<section>
+    <h2>View</h2>
+
+    <p>
+        The view uses mithril tags to create a virtual DOM element representation of the HTML we want.
+    </p>
+
+    <script id="misoTodo4" type="text/syntaxify">
+view: function(ctrl) {
+    return m("UL", [
+        ctrl.list.map(function(todo){
+            return m("LI", todo.text)
+        })
+    ]);
+}
+    </script>
+    <div data-syntaxify="#misoTodo4" data-syntaxify-language="javascript"
+        data-annotations="
+            2`Returns a mithril element with an unordered list of items with the text|
+            3`Maps each item in the list - note that this is a complete expression, as it is within a list that we pass to the mithril tag|
+            4`Creates a list item with the todo text
+        ">
+    </div>
+
+    <p>
+        Views can return either: a mithril element, a list, or a string.
+    </p>
+
+</section>
+
+
+<section data-markdown>
+    <script type="text/template">
+        ## Practical example
+
+        Here is [an example](http://misojs.com/todos) that I prepared earlier.
+
+        I will point out the following features in this example:
+
+        * Isomorphic: the same code is run on both the server and client.
+        * Single page app: with SEO working out of the box.
+        * Tiny JS clientside footprint - less than 25kb (gzip+min).
+        * Live code reloading whilst developing.
+        * Data store agnostic: use whatever data storage you like.
+    </script>
 </section>
 
 
