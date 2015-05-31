@@ -174,18 +174,21 @@ controller: function() {
 
     <script id="misoTodo4" type="text/syntaxify">
 view: function(ctrl) {
-    return m("UL", [
-        ctrl.list.map(function(todo){
-            return m("LI", todo.text)
-        })
+    return m("div.cw", [
+        m("H1", "Todos"),
+        m("UL", [
+            ctrl.list.map(function(todo){
+                return m("LI", todo.text)
+            })
+        ])
     ]);
 }
     </script>
     <div data-syntaxify="#misoTodo4" data-syntaxify-language="javascript"
         data-annotations="
             2`Returns a mithril element with an unordered list of items with the text|
-            3`Maps each item in the list - note that this is a complete expression, as it is within a list that we pass to the mithril tag|
-            4`Creates a list item with the todo text
+            5`Maps each item in the list - note that this is a complete expression, as it is within a list that we pass to the mithril tag|
+            6`Creates a list item with the todo text
         ">
     </div>
 
@@ -200,7 +203,7 @@ view: function(ctrl) {
     <script type="text/template">
         ## Practical example
 
-        Here is [an example](http://misojs.com/todos) that I prepared earlier.
+        Here is [an example](http://localhost:6476/) that I prepared earlier.
 
         I will point out the following features in this example:
 
