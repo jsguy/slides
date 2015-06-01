@@ -25,6 +25,12 @@
 
     <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
 
+
+    <!-- Web sequence diagrams -->
+    <script src="resource/js-sequence-diagrams/bower_components/raphael/raphael-min.js"></script>
+    <script src="resource/js-sequence-diagrams/bower_components/underscore/underscore-min.js"></script>
+    <script src="resource/js-sequence-diagrams/build/sequence-diagram-min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="resource/custom.css">
 </head>
 
@@ -214,6 +220,156 @@ view: function(ctrl) {
         * Isomorphic: the same code is run on both the server and client.
         * Single page app: with SEO working out of the box.
         * Tiny JS clientside footprint - less than 25kb (gzip+min).
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ## Questions for example?
+    </script>
+</section>
+
+
+<section>
+    <h2>What about data?</h2>
+
+    <p>
+        In misojs data is accessed via an API in a uniform manner on both client and server side. Client side we expose the exact same method, using an abstracted transport (JSON RPC2.0).
+    </p>
+
+    <div class="diagram">
+        MVC entity->API: Request
+        API->Server: JSONRPC 2.0 request
+        Note over Server: Server does whatever \nto create the response
+        Server->API: JSONRPC 2.0 Response
+        API->MVC entity: Response
+    </div>
+
+</section>
+
+
+
+<section data-markdown>
+    <script type="text/template">
+        ## Benefits of this solution?
+
+        * Full integration to the mithril rendering system (ensuring efficient and appropriate rendering)
+        * JSONRPC 2.0 is easy to debug compared to other solutions.
+        * You can create an API that exposes arbitrary arguments.
+    </script>
+</section>
+
+
+<section>
+    <h2>Creating an API</h2>
+
+    <p>It's very easy to create a new API in miso - all you have to do is create a set of methods that receive a callback function, an error function and an arguments object</p>
+
+    <script id="misoTodo5" type="text/syntaxify">
+module.exports = function(utils){
+    return {
+        find: function(callback, err, args){
+            callback({"found": "something"});
+        }
+    };
+};
+    </script>
+    <div data-syntaxify="#misoTodo5" data-syntaxify-language="javascript"
+        data-annotations="
+            1`We have access to a utils object that has various convenience methods|
+            4`Each method simply calls back with whatever object we want
+            ">
+    </div>
+
+    <p>
+        Each method must either use the callback or the error function, and can optionally use the args object.
+    </p>
+</section>
+
+
+
+
+<section data-markdown>
+    <script type="text/template">
+        ## Built-in APIs
+
+        Misojs has some builtn-in APIs:
+
+        * "flatfiledb" - Simply stores data in a flat file, good for developing an API without actually installing a database
+        * "mongoose" - Store and retreive data in MongoDB using the popular mongoose adaptor
+        * "sqllite" - SQL lite adaptor - this is not yet complete, if anyone feels like contributing to an open source project, let me know after the talk.
+
+        We will be using the flatfiledb for our example, as it can be used without installing anything.
+    </script>
+</section>
+
+
+
+<section>
+    <h2>Include the buil-in api</h2>
+
+    <p>
+        At the top of the program, we add the flatfiledb:
+    </p>
+
+    <script id="misoTodo6" type="text/syntaxify">
+var db = require('../system/api/flatfiledb/api.server.js')(m);
+    </script>
+    <div data-syntaxify="#misoTodo6" data-syntaxify-language="javascript">
+    </div>
+
+    <p>
+        Note: we pass in "m", which is a reference to the mithril instance we're using, this is so that we can hook into the rendering engine and ensure that rendering doesn't occur till we're done loading via our API.
+    </p>
+
+</section>
+
+
+<section>
+    <h2>Model update</h2>
+
+    <p>
+        The miso data API needs a an ID for storing the key for our todo, so let us add one:
+    </p>
+
+    <script id="misoTodo7" type="text/syntaxify">
+module.exports.index = {
+    models: {
+        todo: function(data){
+            this.text = data.text;
+            this.done = m.prop(data.done == "false"? false: data.done);
+            this._id = data._id;
+        }
+    },
+    ...
+}
+    </script>
+    <div data-syntaxify="#misoTodo7" data-syntaxify-language="javascript"
+        data-annotations="
+            6`We add an '_id' attribute in the todo model.
+        ">
+    </div>
+
+    <p>
+        That is all we need to add, in order to be able to reference a "todo" item stored by the flatfiledb API.
+    </p>
+
+</section>
+
+
+<section>
+.... Example 2 goes here ...
+</section>
+
+
+<section data-markdown>
+    <script type="text/template">
+        ## Practical example 2
+
+        Here is [an example](http://localhost:6476/) that I prepared earlier.
+
+        We will look at the following features in this example:
+
         * Live code reloading whilst developing.
         * Data store agnostic: use whatever data storage you like.
     </script>
@@ -228,7 +384,7 @@ view: function(ctrl) {
     </ul>
 </section>
 
-
+<!--
 <section>
     <h2>Site of the month: VelocityJS</h2>
     <ul>
@@ -237,7 +393,7 @@ view: function(ctrl) {
         <li> <a target="_blank" href="http://codepen.io/collection/tIjGb/">List of demos</a></li>
     </ul>
 </section>
-
+-->
 
 <section>
     <h2>Thanks for coming!</h2>
@@ -280,6 +436,22 @@ view: function(ctrl) {
         // Reveal.addEventListener( 'slidechanged', function( event ) {
         //  console.log(event.previousSlide, event.currentSlide, event.indexh, event.indexv);
         // } );
+</script>
+
+<script>
+    //  Setup sequence diagrams
+    $(".diagram").sequenceDiagram({theme: 'hand'});
+</script>
+
+
+<script>
+    //  Muck about with the logo a little, why not :)
+    var setLogoWidth = function(){
+        var width = 40 + parseInt(Math.random() * 40, 10);
+        $('#logo,#logoEvil').css({width: width + "%"});
+    };
+
+    setInterval(setLogoWidth, 5000);
 </script>
 
 </body>

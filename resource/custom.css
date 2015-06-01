@@ -27,12 +27,33 @@ table td.yes    { background: #090; color: #fff; }
 
 .clear { clear: both; }
 
-/* Fun with spinning logo */
-#logoContainer {perspective: 600px; position: relative; top: 50%; transform: translateY(-5%); }
-#logo {width: 33%; -webkit-animation-name: spinner; -webkit-animation-timing-function: linear; -webkit-animation-iteration-count: infinite; -webkit-animation-duration: 45s; animation-name: spinner; animation-timing-function: linear; animation-iteration-count: infinite; animation-duration: 45s; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d; transform-style: preserve-3d; 
-    -webkit-filter: blur(100px); opacity: 0; transition: all 2s; }
+/* Diagrams */
+div.diagram { background: #fff; border-radius: 2px; padding: 1em 0 }
 
-.present #logo { -webkit-filter: none; opacity: 1; }
+/* Fun with spinning logo */
+#logoContainer {perspective: 600px; position: absolute; top: 50%; Xtransform: translateY(-5%); }
+#logo {
+    max-height: 100%;
+    max-width: 100%;
+    width: 50%;
+    -webkit-animation-name: spinner;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 45s;
+    animation-name: spinner;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 45s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-filter: blur(100px);
+    opacity: 0; 
+    transition: all 5s; 
+}
+
+.present #logo { -webkit-filter: none; opacity: 0.25; }
 
 @-webkit-keyframes spinner { 
     from {-webkit-transform: rotateY(0deg); }
@@ -46,6 +67,6 @@ table td.yes    { background: #090; color: #fff; }
 
 
 /* Fun with speaker name */
-.speakerName {-webkit-filter: blur(100px); opacity: 0; transition: all 2s; color: #000; }
+.speakerName {-webkit-filter: blur(100px); opacity: 0; transition: all 2s }
 .present .speakerName { -webkit-filter: none; opacity: 1; color: #22a7df;}
 
