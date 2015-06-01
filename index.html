@@ -502,7 +502,7 @@ ctrl.archive = function(){
     <h2>Controller view model</h2>
 
     <p>
-        We add a "view model" that is used to keep track of the UI and provide some utility functionality.
+        We add a "view model" that is used to keep track of the UI and toggle todos.
     </p>
 
     <script id="misoTodo13" type="text/syntaxify">
@@ -554,7 +554,7 @@ db.find({type: modelType}, {background: true, initialValue: []}).then(function(d
     </div>
 
     <p>
-        You'll note that the db API implements a <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" target="_blank">promise</a>-like interface, which means the function passed to the "then" method is called once the result is ready. Miso ensures that the data request is completed before attempting to render the view.
+        You'll note that the db API implements a <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" target="_blank">promise</a>-like interface, which means the function passed to the "then" method is called once the result is ready. Miso ensures that the data request is completed before attempting to render the view - the callback function can return another promise, if there is more work to do.
     </p>
 </section>
 
