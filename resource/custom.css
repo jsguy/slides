@@ -26,3 +26,26 @@ table td.no     {  }
 table td.yes    { background: #090; color: #fff; }
 
 .clear { clear: both; }
+
+/* Fun with spinning logo */
+#logoContainer {perspective: 600px; position: relative; top: 50%; transform: translateY(-5%); }
+#logo {width: 33%; -webkit-animation-name: spinner; -webkit-animation-timing-function: linear; -webkit-animation-iteration-count: infinite; -webkit-animation-duration: 45s; animation-name: spinner; animation-timing-function: linear; animation-iteration-count: infinite; animation-duration: 45s; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d; transform-style: preserve-3d; 
+    -webkit-filter: blur(100px); opacity: 0; transition: all 2s; }
+
+.present #logo { -webkit-filter: none; opacity: 1; }
+
+@-webkit-keyframes spinner { 
+    from {-webkit-transform: rotateY(0deg); }
+    to {-webkit-transform: rotateY(-360deg); }
+}
+
+@keyframes spinner { 
+    from {-moz-transform: rotateY(0deg); -ms-transform: rotateY(0deg); transform: rotateY(0deg); }
+    to {-moz-transform: rotateY(-360deg); -ms-transform: rotateY(-360deg); transform: rotateY(-360deg); }
+}
+
+
+/* Fun with speaker name */
+.speakerName {-webkit-filter: blur(100px); opacity: 0; transition: all 2s; color: #000; }
+.present .speakerName { -webkit-filter: none; opacity: 1; color: #22a7df;}
+

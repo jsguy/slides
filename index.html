@@ -32,13 +32,17 @@
 <div class="reveal">
 
 <div class="slides">
-    <section>
-        <h1>
-HotelsCombined
-Front end forum
-</h1>
-    </section>
-    
+
+<section>
+    <div id="logoContainer">
+        <img id="logo" src="resource/img/HC_Icon_White.png" />
+    </div>
+    <h1>HotelsCombined
+        Front end forum
+    </h1>
+</section>
+
+
 <section>
     <h2>Talk 1: React – view components just got better!</h2>
     <p class="speakerName">Bogdan Luca</p>
@@ -92,7 +96,8 @@ module.exports.index = {
     </script>
     <div data-syntaxify="#misoTodo1" data-syntaxify-language="javascript"
         data-annotations="
-            2`Any required models should be defined here|
+            1`We use node-style require, it works in the browser with Browserify|
+            2`Any needed models should be defined here|
             3-5`The controller must return 'this'.<br/>We do that, so there is a pointer that miso can interact with to get at the controller and allow it to work isomorphically|
             7`The view can return a mithril object or plain text
         ">
@@ -117,7 +122,6 @@ module.exports.index = {
         todo: function(data){
             this.text = data.text;
             this.done = m.prop(data.done == "false"? false: data.done);
-            this._id = data._id;
         }
     },
     ...
