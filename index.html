@@ -123,20 +123,17 @@ module.exports.index = {
     </p>
 
     <script id="misoTodo2" type="text/syntaxify">
-module.exports.index = {
-    models: {
-        todo: function(data){
-            this.text = data.text;
-            this.done = m.prop(data.done == "false"? false: data.done);
-        }
-    },
-    ...
+models: {
+    todo: function(data){
+        this.text = data.text;
+        this.done = m.prop(data.done == "false"? false: data.done);
+    }
 }
     </script>
     <div data-syntaxify="#misoTodo2" data-syntaxify-language="javascript"
         data-annotations="
-            4`'text' is a plain string attribute, it simply contains a string|
-            5`The 'done' attribute is a mithril property, it is exposed as a getter/setter, and here we allow the string 'false' to be set as a proper false value.
+            3`'text' is a plain string attribute, it simply contains a string|
+            4`The 'done' attribute is a mithril property, it is exposed as a getter/setter, and here we allow the string 'false' to be set as a proper false value.
         ">
     </div>
 
@@ -213,7 +210,7 @@ view: function(ctrl) {
     <script type="text/template">
         ## Practical example
 
-        Here is [an example](http://localhost:6476/) that I prepared earlier.
+        Here is [an example](http://localhost:6477/) that I prepared earlier.
 
         I will point out the following features in this example:
 
@@ -282,7 +279,7 @@ view: function(ctrl) {
 <section>
     <h2>Creating a custom API</h2>
 
-    <p>It's very easy to create a new API in miso - all you have to do is create a set of methods that receive a callback function, an error function and an arguments object</p>
+    <p>It's very easy to create a new API in miso - all you have to do is create one or more methods that receive a callback function, an error function and an arguments object</p>
 
     <script id="misoTodo5" type="text/syntaxify">
 module.exports = function(utils){
@@ -295,7 +292,6 @@ module.exports = function(utils){
     </script>
     <div data-syntaxify="#misoTodo5" data-syntaxify-language="javascript"
         data-annotations="
-            1`We have access to a utils object that has various convenience methods|
             3`Here we create a 'find' method that the API can use|
             4`Each method simply calls back with whatever object we found - this particular example doesn't do much :p
             ">
@@ -332,24 +328,21 @@ var db = require('../system/api/flatfiledb/api.server.js')(m);
     <h2>Model</h2>
 
     <p>
-        The miso data API needs a an ID for storing the key for our todo, so let us add one:
+        The miso data API needs an ID for storing the key for our todo, so let us add one:
     </p>
 
     <script id="misoTodo7" type="text/syntaxify">
-module.exports.index = {
-    models: {
-        todo: function(data){
-            this.text = data.text;
-            this.done = m.prop(data.done == "false"? false: data.done);
-            this._id = data._id;
-        }
-    },
-    ...
+models: {
+    todo: function(data){
+        this.text = data.text;
+        this.done = m.prop(data.done == "false"? false: data.done);
+        this._id = data._id;
+    }
 }
     </script>
     <div data-syntaxify="#misoTodo7" data-syntaxify-language="javascript"
         data-annotations="
-            6`We add an '_id' attribute in the todo model.
+            5`We add an '_id' attribute in the todo model, used for storing the key that points to our todo.
         ">
     </div>
 
@@ -403,11 +396,7 @@ return DIV({"class": "cw cf"}, [
     <h2>Controller</h2>
 
     <p>
-        First we add a few "convenience" items.
-    </p>
-
-    <p>
-        At the start of the mvc entity declaration:
+        First we add a few "convenience" items, at the start of the mvc entity declaration:
     </p>
 
     <script id="misoTodo9" type="text/syntaxify">
@@ -418,7 +407,7 @@ var self = module.exports.index = {
     </div>
 
     <p>
-        In the controller:
+        A pointer named 'self' to the 'index' of the module, so we can access it later, and in the controller we add:
     </p>
 
     <script id="misoTodo10" type="text/syntaxify">
@@ -431,6 +420,11 @@ var ctrl = this,
             2`The name of our model type, so we don't need to repeat it everywhere
         ">
     </div>
+
+    <p>
+        Which is a pointer ('ctrl') to the controller instance, along with the model type that miso exposes for this mvc entity.
+    </p>
+
 </section>
 
 
@@ -438,7 +432,7 @@ var ctrl = this,
     <h2>Controller "addTodo" method</h2>
 
     <p>
-        We add a method on the controller to add todos.
+        We add a method on the controller that can add todos.
     </p>
 
     <script id="misoTodo11" type="text/syntaxify">
@@ -462,9 +456,9 @@ ctrl.addTodo = function(e){
     <div data-syntaxify="#misoTodo11" data-syntaxify-language="javascript"
         data-annotations="
         1`Methods are added onto the controller directly|
-        2`The value is retreived from a view model (that we will look at in a later slide).|
+        2`The value is retreived from a view model (that we will look at in a later slide). Note: this isn't exactly best practice, but makes the example shorter.|
         4`We create a new todo model, using the 'self' pointer created earlier.|
-        10`We save the todo using the 'db' flatfiledb API interface loaded earlier.|
+        10`We save the todo using the 'db' flatfiledb API interface loaded earlier. Note: Again, for brevity, we assume there was no error.|
         14`As this is simply a normal event handler, we prevent the default action, as you normally would do in a click-event handler.
         ">
     </div>
@@ -496,6 +490,7 @@ ctrl.archive = function(){
     <div data-syntaxify="#misoTodo12" data-syntaxify-language="javascript"
         data-annotations="
         3`Iterate on the todos, and remove the completed ones.|
+        7`For brevity of the example, we assume everything goes to plan, ie: no error checking and handling|
         12`Keep the incomplete todos.
         ">
     </div>
@@ -507,7 +502,7 @@ ctrl.archive = function(){
     <h2>Controller view model</h2>
 
     <p>
-        We add a model that is used to keep track of the UI and provides utility functionality.
+        We add a "view model" that is used to keep track of the UI and provide some utility functionality.
     </p>
 
     <script id="misoTodo13" type="text/syntaxify">
@@ -564,21 +559,11 @@ db.find({type: modelType}, {background: true, initialValue: []}).then(function(d
 </section>
 
 
-
-
-
-
-
-
-
-
-
-
 <section data-markdown>
     <script type="text/template">
         ## Practical example 2
 
-        Here is [an example](http://localhost:6476/) that I prepared earlier.
+        Here is [an example](http://localhost:6478/) that I prepared earlier.
 
         We will look at the following features in this example:
 
