@@ -36,7 +36,8 @@ function $$(expr, con) {
     return Array.prototype.slice.call((con || document).querySelectorAll(expr));
 }
 
-var CRLF = crlf = /\r?\n|\r/g;
+var CRLF = crlf = /\r?\n|\r/g,
+    currentLineCount = 0;
     
 function annotateLines(pre, lines, classes) {
     var ranges = lines.replace(/\s+/g, '').split(','),
@@ -47,7 +48,8 @@ function annotateLines(pre, lines, classes) {
     offset -= 1;
     
     var lineHeight = parseFloat(getComputedStyle(pre).lineHeight);
-
+    //  95% height for some reason?
+    lineHeight *= 0.95;
 
     for(var j = 0; j < allLines.length; j += 1) {
         tmp = allLines[j].split("`");
@@ -57,9 +59,8 @@ function annotateLines(pre, lines, classes) {
         range = range.split('-');
 
         var start = +range[0],
-            end = +range[1] || start;
-        
-        var line = document.createElement('div');
+            end = +range[1] || start,
+            line = document.createElement('div');
         
         //  Add line breaks
         line.textContent = Array(end - start + 2).join(' \r\n');
@@ -69,7 +70,7 @@ function annotateLines(pre, lines, classes) {
         line.setAttribute('data-hint', text);
         //  TODO: Work out why this is not ligning up properly - probably needs to take into 
         //  account margin and padding, etc...
-        line.style.top = (((start - offset - 1) * lineHeight) - lineHeight * 0.07) + 'px';
+        line.style.top = (((start - offset - 1) * lineHeight)) + 'px';
 
         $(pre).append(line);
 
@@ -94,18 +95,12 @@ function annotateLines(pre, lines, classes) {
             $('.annotate-tooltip')
                 .css({ top: y, left: x })
         });
-
-
-
-
-
     }
 }
 
 Prism.hooks.add('after-highlight', function(env) {
-    var pre = env.element.parentNode;
-    //var pre = env.element;
-    var lines = pre && pre.getAttribute('data-annotations');
+    var pre = env.element.parentNode,
+        lines = pre && pre.getAttribute('data-annotations');
     
     if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
         return;
@@ -116,6 +111,10 @@ Prism.hooks.add('after-highlight', function(env) {
     });
     
     annotateLines(pre, lines);
+});
+
+Prism.hooks.add('before-highlight', function(env) {
+    currentLineCount = env.code.split(CRLF).length
 });
 
 })();
