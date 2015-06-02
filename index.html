@@ -75,7 +75,7 @@
         * A full-stack JavaScript framework.
         * Isomorphic: the same code is run on both the server and client.
         * Single page app: with SEO working out of the box.
-        * Tiny JS clientside footprint - less than 25kb (gzip+min).
+        * Tiny JS clientside footprint - less than 15kb (gzip+min).
         * Live code reloading whilst developing.
         * Data store agnostic: use whatever data storage you like.
         * Based on Express, Browserify, Mithril and Nodemon
@@ -217,7 +217,6 @@ view: function(ctrl) {
 
         * Isomorphic: the same code is run on both the server and client.
         * Single page app: with SEO working out of the box.
-        * Tiny JS clientside footprint - less than 25kb (gzip+min).
     </script>
 </section>
 
@@ -381,12 +380,6 @@ return DIV({"class": "cw cf"}, [
         ">
     </div>
 </section>
-
-
-
-
-
-
 
 
 <section>
@@ -564,8 +557,19 @@ db.find({type: modelType}, {background: true, initialValue: []}).then(function(d
 
         We will look at the following features in this example:
 
+        * Tiny JS clientside footprint - less than 15kb (gzip+min).
         * Live code reloading whilst developing.
         * Data store agnostic: use whatever data storage you like.
+    </script>
+</section>
+
+
+<section data-markdown>
+    <script type="text/template">
+        ## Questions for example?
+
+        * Dont forget to look at "gzip-size public/miso.js"
+
     </script>
 </section>
 
