@@ -72,6 +72,7 @@
     <script type="text/template">
         ## What is misojs?
 
+        * A full-stack JavaScript framework.
         * Isomorphic: the same code is run on both the server and client.
         * Single page app: with SEO working out of the box.
         * Tiny JS clientside footprint - less than 25kb (gzip+min).
@@ -256,7 +257,7 @@ view: function(ctrl) {
 
         * Full integration to the mithril rendering system (ensuring efficient and appropriate rendering)
         * JSONRPC 2.0 is easy to debug compared to other solutions.
-        * You can easily create an API that exposes arbitrary arguments.
+        * You can easily create an API that exposes arbitrary arguments and data responses.
     </script>
 </section>
 
@@ -277,9 +278,9 @@ view: function(ctrl) {
 
 
 <section>
-    <h2>Creating a custom API</h2>
+    <h2>API definition</h2>
 
-    <p>It's very easy to create a new API in miso - all you have to do is create one or more methods that receive a callback function, an error function and an arguments object</p>
+    <p>To create an API in miso, you create one or more methods that receive a callback function, an error function and an arguments object</p>
 
     <script id="misoTodo5" type="text/syntaxify">
 module.exports = function(utils){
