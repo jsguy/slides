@@ -233,19 +233,15 @@ view: function(ctrl) {
     <h2>What about data?</h2>
 
     <p>
-        In misojs data is accessed via a uniform API  - the client side is exposed using an abstracted transport (JSON RPC2.0).
+        In misojs data is accessed via a uniform API - the client side is exposed using an abstracted transport (JSON RPC2.0).
     </p>
 
     <div class="diagram">
-        MVC entity->Uniform API: Request
-        Uniform API-->Server API: JSONRPC 2.0 request
-        Server API-->Uniform API: JSONRPC 2.0 Response
-        Uniform API->MVC entity: Response
+        MVC entity->Miso API: Request
+        Miso API-->Server API: JSONRPC 2.0 request
+        Server API-->Miso API: JSONRPC 2.0 Response
+        Miso API->MVC entity: Response
     </div>
-
-    <p>
-        When using the API on the server we don't need the abstract transport, so the Uniform API calls the server API directly.
-    </p>
 
 </section>
 
