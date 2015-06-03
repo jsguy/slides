@@ -574,6 +574,54 @@ db.find({type: modelType}, {background: true, initialValue: []}).then(function(d
 </section>
 
 
+
+<section>
+    <h2>SPA - First page load</h2> 
+
+    <div class="diagram">
+        Participant Client
+        Participant Mithril
+        Participant Server
+        Client->Server: GET /todos
+        Server->Client: HTML and rendered data
+        Note over Client: Render static HTML page\n (no UI events, only static data)
+        Client->Mithril: Initialise module
+        Mithril->Server: Data query
+        Server->Mithril: Data result
+        Mithril-->Client: Render page with UI events and data
+    </div>
+
+</section>
+
+
+
+<section>
+    <h2>SPA - Client page lifecycle</h2> 
+
+    <div class="diagram">
+        Participant Client
+        Participant Mithril
+        Participant Server
+        Note over Client: We are at /users and \nclick an "edit user" link 
+        Client->Mithril: GET /user/123
+        Note over Mithril: Runs user.edit MVC entity\non the client only
+        Mithril-Server: Data query
+        Server->Mithril: Data result
+        Mithril-->Client: Render the user edit page
+    </div>
+
+</section>
+
+
+<section>
+    <h2>SPA - First page VS lifecycle</h2> 
+    <ul>
+        <li>First page will run data query twice - you can use caching to optimise this</li>
+        <li>Lifecycle will only request the data, as miso.js provides the page and layout client-side on first page load</li>
+    </ul>
+</section>
+
+
 <section>
     <h2>Questions?</h2> 
     <ul>
