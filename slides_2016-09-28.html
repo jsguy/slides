@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HC FEF</title>
+
+    <link rel="stylesheet" href="resource/revealjs/css/reveal.css">   
+    <link rel="stylesheet" href="resource/revealjs/css/theme/black.css" id="theme">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="resource/revealjs/lib/css/zenburn.css">
+
+    <script src="resource/knockout-3.2.0.js"></script>
+    <script src="resource/kotools.js"></script>
+    <script src="resource/jquery-1.11.2.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/syntaxify/prism.min.css">
+
+    <link rel="stylesheet" type="text/css" href="resource/prism.annotate/prism.annotate.css">
+
+
+    <script type="text/javascript" src="resource/syntaxify/prism.min.js" data-manual></script>
+
+    <script type="text/javascript" src="resource/prism.annotate/prism.annotate.js"></script>
+
+
+    <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
+
+
+    <!-- Web sequence diagrams -->
+    <script src="resource/js-sequence-diagrams/bower_components/raphael/raphael-min.js"></script>
+    <script src="resource/js-sequence-diagrams/bower_components/underscore/underscore-min.js"></script>
+    <script src="resource/js-sequence-diagrams/build/sequence-diagram-min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/custom.css">
+</head>
+
+<body>
+<div class="reveal">
+
+<div class="slides">
+
+<section>
+    <div id="logoContainer">
+        <img id="logo" src="resource/img/HC_Icon_White.png" />
+    </div>
+    <h1>HotelsCombined
+        Front end forum
+    </h1>
+</section>
+
+
+<section>
+    <h2>Talk 1: Sole.js - the soul of the console</h2>
+    <p class="speakerName">Mikkel Bergmann</p>
+    <p>
+        Tagging, filtering, globbing, Querying, plugins, event subscription. These are all words that usually aren't associated with things that a console can do; that is all about to change!
+    </p>
+    <a target="_blank" href="http://solejs.com">Let us take the red pill...</a>
+</section>
+
+
+<section>
+    <h2>Talk 2: AutoRefresh - Freshen your CSS, guvnor?</h2>
+    <p class="speakerName">Mikkel Bergmann</p>
+    <p>
+        Automatically refreshes your styles in the browser when files are updated, optionally executing a compilation step.
+    </p>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ## Autorefresh
+
+        <a target="_blank" href="https://preview.c9users.io/jsguy/autorefresh/example/test01.htm?_c9_id=livepreview0&_c9_host=https://ide.c9.io">Auto<a/>
+        <a target="_blank" href="https://ide.c9.io/jsguy/autorefresh">Refresh</a>.
+    </script>
+</section>
+
+
+<section>
+    <h2>Questions?</h2> 
+    <ul>
+        <li><a href="http://solejs.com" target="_blank">Sole.js website</a></li>
+        <li><a href="http://jsguy.github.io/autorefresh/" target="_blank">Autorefresh</a></li>
+    </ul>
+</section>
+
+<section>
+    <h2>Thanks for coming!</h2>
+    <p>
+        If you are interested in presenting a lightning talk, please let me know for next month.
+    </p>
+</section>
+
+</div>
+
+</div>
+
+<!-- Setup reveal -->
+<script src="resource/revealjs/lib/js/head.min.js"></script>
+<script src="resource/revealjs/js/reveal.js"></script>
+
+<script>
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: false,
+            history: true,
+            center: true,
+            // available themes are in /css/theme
+            theme: Reveal.getQueryHash().theme, 
+            transition: Reveal.getQueryHash().transition || 'default',
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'resource/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: 'resource/revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'resource/revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //  We use prism and syntaxify.
+                //{ src: 'resource/revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: 'resource/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                { src: 'resource/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });     
+
+        // Reveal.addEventListener( 'slidechanged', function( event ) {
+        //  console.log(event.previousSlide, event.currentSlide, event.indexh, event.indexv);
+        // } );
+</script>
+
+<script>
+    //  Setup sequence diagrams
+    $(".diagram").sequenceDiagram({theme: 'hand'});
+</script>
+
+
+<script>
+    //  Muck about with the logo a little, why not :)
+    var setLogoWidth = function(){
+        var width = 40 + parseInt(Math.random() * 40, 10);
+        $('#logo,#logoEvil').css({width: width + "%"});
+    };
+
+    setInterval(setLogoWidth, 5000);
+</script>
+
+</body>
+</html> 
