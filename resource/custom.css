@@ -19,7 +19,7 @@ ul,ol,dl { display: block !important; margin: 1em 2em !important;}
 .sizeFont { font-weight: bold; font-size: 1.3em }
 .big { font-size: 1.5em !important; font-style: italic !important; color: #99c; }
 
-.reveal section img {background: none; border: 0; box-shadow: none; margin: 0; }
+.reveal section img {background: none; border: 0; box-shadow: none; margin: 0;}
 
 table.fwCompare td        { padding: 0.2em 0.4em; background: #666}
 table td.no     {  }
@@ -49,18 +49,18 @@ div.diagram { background: #fff; border-radius: 2px; padding: 1em 0 }
     -ms-transform-style: preserve-3d;
     transform-style: preserve-3d;
     -webkit-filter: blur(100px);
-    opacity: 0; 
-    transition: all 5s; 
+    opacity: 0;
+    transition: all 5s;
 }
 
 .present #logo { -webkit-filter: none; opacity: 0.25; }
 
-@-webkit-keyframes spinner { 
+@-webkit-keyframes spinner {
     from {-webkit-transform: rotateY(0deg); }
     to {-webkit-transform: rotateY(-360deg); }
 }
 
-@keyframes spinner { 
+@keyframes spinner {
     from {-moz-transform: rotateY(0deg); -ms-transform: rotateY(0deg); transform: rotateY(0deg); }
     to {-moz-transform: rotateY(-360deg); -ms-transform: rotateY(-360deg); transform: rotateY(-360deg); }
 }
@@ -69,4 +69,3 @@ div.diagram { background: #fff; border-radius: 2px; padding: 1em 0 }
 /* Fun with speaker name */
 .speakerName {-webkit-filter: blur(100px); opacity: 0; transition: all 2s }
 .present .speakerName { -webkit-filter: none; opacity: 1; color: #22a7df;}
-

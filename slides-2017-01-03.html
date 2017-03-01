@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HC FEF</title>
+
+    <link rel="stylesheet" href="resource/revealjs/css/reveal.css">
+    <link rel="stylesheet" href="resource/revealjs/css/theme/black.css" id="theme">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="resource/revealjs/lib/css/zenburn.css">
+
+    <script src="resource/knockout-3.2.0.js"></script>
+    <script src="resource/kotools.js"></script>
+    <script src="resource/jquery-1.11.2.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/syntaxify/prism.min.css">
+
+    <link rel="stylesheet" type="text/css" href="resource/prism.annotate/prism.annotate.css">
+
+
+    <script type="text/javascript" src="resource/syntaxify/prism.min.js" data-manual></script>
+
+    <script type="text/javascript" src="resource/prism.annotate/prism.annotate.js"></script>
+
+
+    <script type="text/javascript" src="resource/syntaxify/jquery.syntaxify.js"></script>
+
+
+    <!-- Web sequence diagrams -->
+    <script src="resource/js-sequence-diagrams/bower_components/raphael/raphael-min.js"></script>
+    <script src="resource/js-sequence-diagrams/bower_components/underscore/underscore-min.js"></script>
+    <script src="resource/js-sequence-diagrams/build/sequence-diagram-min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="resource/custom.css">
+	<style>
+		.slides section img {width: 90%}
+	</style>
+</head>
+
+<body>
+<div class="reveal">
+
+<div class="slides">
+
+<section>
+    <div id="logoContainer">
+        <img id="logo" src="resource/img/HC_Icon_White.png" />
+    </div>
+    <h1>HotelsCombined
+        Front end forum
+    </h1>
+</section>
+
+
+<section>
+    <h2>Talk 1: Mobile debugging</h2>
+    <p class="speakerName">Boris Pavlov</p>
+    <p>
+        Boris shows us how to debug mobile sites - all without using USB or wires, wow!
+    </p>
+</section>
+
+<section>
+    <h2>Talk 2: Gotta test 'em all!</h2>
+	<p class="speakerName">Mikkel Bergmann</p>
+    <p>
+		I wanna be the very best, Like no one ever was, To catch them is my real <i><b>test</b></i>...!
+    </p>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## Test em all?
+
+* The end goal is to be able to test your website on multiple devices simultaneously.
+* For our purposes, this will require a solution that includes a proxy, so we can test on our environments.
+</script>
+</section>
+
+<section>
+    <h2>Like this</h2>
+	<img src="resource/img/browsersync.gif"/>
+</section>
+
+<section>
+    <h2>How does it work?</h2>
+<div class="diagram">
+    Browser->ControlProxy: Request a page
+    ControlProxy-->Endpoint: Forward request
+    Endpoint-->ControlProxy: Response
+	note over ControlProxy: Inject "parasitic JS" \nbelow body tag
+	ControlProxy->Browser: respond with proxied page
+</div>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## "Parasitic JS"?
+
+This is a script that takes over all DOM events, and passes/receives event objects, and applies them.
+
+* Sets up a push connection (WS or long poll)
+* Captures all DOM events and metrics
+* Transmits back serialised events to proxy
+* Proxy syncs events to other browsers
+</script>
+</section>
+
+<section>
+	<h2>Browser event sync example</h2>
+<div class="diagram">
+	note over Browser: User clicks\non element
+	Browser->ParasiticJS: Event object
+	ParasiticJS->ControlProxy: serialised\nevent object
+    ControlProxy-->OtherBrowsers: Event object
+	note over OtherBrowsers: Apply events\nfrom object
+</div>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## Testing it
+
+We will use the Revato booking engine as a demo, there are a few pain-points:
+
+* Selecting a date on the calendar
+* Swiping the gallery in mobile (touch event)
+</script>
+</section>
+
+<section>
+<h2>We will look at</h2>
+
+<ul>
+	<li><a href="https://browsersync.io/" target="_blank">Browser sync (open source)</a></li>
+	<li><a href="https://codekitapp.com/" target="_blank">CodeKit (paid)</a></li>
+	<li><a href="https://www.vanamco.com/ghostlab/" target="_blank">Ghostlab (paid)</a></li>
+</ul>
+</section>
+
+
+
+<section>
+    <h2>Browsersync</h2>
+	<p>
+		<blockquote>
+			"BrowserSync makes your tweaking and testing faster by synchronizing file changes and interactions across many devices."
+		</blockquote>
+		Note: It does a bunch of other things, but we will concentrate on the <a href="https://browsersync.io/docs/command-line#start" target="_blank">proxying</a> capabilities.
+	</p>
+
+</section>
+
+
+<section>
+    <h2>Using browsersync</h2>
+	<script id="using-bsync" type="text/syntaxify">
+npm install -g browser-sync
+browser-sync start --proxy http://dev.book.revato.com/
+	</script>
+	<div data-syntaxify="#using-bsync" data-syntaxify-language="javascript"
+        data-annotations="
+            1`Install it globally|
+            2`Start the proxy
+        ">
+    </div>
+	<p>
+		<a href="http://192.168.0.10:3001" target="_blank">Here's one I prepared earlier</a>.
+	</p>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## So what went wrong?
+
+* Well: basically the [DOM event module](https://github.com/BrowserSync/browser-sync-client/pulls) is ~~crap~~ somewhat sub-optimal
+* and no-one has
+[done anything](https://github.com/BrowserSync/browser-sync-client/pulls)
+[about it](https://github.com/BrowserSync/browser-sync/issues/1032) for a long time
+* though that might not be a totally [inexcusable](https://github.com/BrowserSync/browser-sync/issues/1314) thing, if you're swamped with requests like that.
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## DOM event module?
+
+* Yeah, [this](https://github.com/BrowserSync/browser-sync-client/pull/23) - they've been working on v3 for 2.5 years
+* Totally without taking any [pull](https://github.com/BrowserSync/browser-sync-client/pull/5) requests.
+* This is a really good way to stop people from wanting to contribute to your project.
+</script>
+</section>
+
+
+<section>
+	<h2>So do we just give up?</h2>
+	<img src="resource/img/giveup.jpg"/>
+</section>
+
+<section>
+	<h2>Of course not!</h2>
+	<div>
+		<img src="resource/img/fork_and_conquer.jpg"/>
+	</div>
+</section>
+
+
+<section>
+	<h2>Building our very own Dragonite</h2>
+
+	<img src="resource/img/dragonite.png" style="width:70%"/>
+<br/>
+	We <a href="https://github.com/jsguy/browser-sync-client">fork and conquer</a>!
+	<a href="http://192.168.0.10:4001" target="_blank">Here's an example I prepared earlier</a>.
+</section>
+
+
+
+<section>
+	<h2>What's different?</h2>
+
+	<ul>
+		<li>Preliminary touch event support (slideshow)</li>
+		<li>More input events (better typing support)</li>
+		<li>Uses xpath to find elements instead of indexes (fix calendar issue)</li>
+		<li>Sync content-editable data</li>
+	</ul>
+
+</section>
+
+
+<section>
+	<h2>CodeKit</h2>
+
+	<p>
+		<blockquote>
+			"CodeKit automatically refreshes browsers as you work. Like magic."
+		</blockquote>
+	</p>
+	<img src="resource/img/app-prefs-browsers@2x.png" style="width: 70%"/>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+## Huh?
+
+* So this thing is geared towards compiling LESS, SASS, ES6, etc...
+* They feature [browser sync](https://codekitapp.com/help/browser-sync/), but it doesn't work
+* There's no proxy mode, just static serving of files...
+* Next!
+</script>
+</section>
+
+
+
+
+<section data-markdown>
+<script type="text/template">
+## Ghostlab
+
+>"With Ghostlab, you can test any website on various browsers and mobile devices simultaneously. To start, drag the URL into Ghostlab and click the “Play” button."
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
+## History
+
+I first looked at ghostlab more than a year ago, with version 1.X
+* The calendar test failed
+* The app crashed
+* It was uninstalled, as they mentioned in their support site to wait till they get v2 ready.
+* Meh.
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
+## Ghostlab v2 - An improvement
+
+* This thing worked much better out of the box
+* Setup was as simple as pasting a URL
+
+[DEMO](http://192.168.0.10:8005/Grid?PropertyId=3779)
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## Not so fast...
+
+![Doh](resource/img/ghostlab_doh.jpg)
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type="text/template">
+## It's me, not you...
+
+* We have a rather funky redirect when completing a booking in revato
+* It POSTS to the credit card vault URL, then redeirects back to the environment URL
+* The "enhanced" browser sync followed the redirect, but of course you lose control, so what GhostLab did was actually better.
+
+</script>
+</section>
+
+<section data-markdown>
+<script type="text/template">
+
+## Conclusion
+
+* Ghostlab was overall better than the other solutions
+* CodeKit wasn't suitable for our use, which wasn't clear from their ~~documentation~~ promotional info
+* Browser sync works for some things, and with a few tweaks, worked almost as well as GhostLab, though was nowhere near as easy to setup and use.
+
+So, go get [GhostLab](https://www.vanamco.com/ghostlab/), (it costs money, but it's probably worth it...), and check out their neat [DeviceLab](https://www.vanamco.com/devicelab/) whilst you're at it.
+[Eevee](http://codepen.io/davidkpiano/pen/NAZarB)
+
+
+<div class="eevee">
+  <div class="body">
+    <div class="head">
+      <div class="ears">
+        <div class="ear">
+          <div class="lobe"></div>
+        </div>
+        <div class="ear">
+          <div class="lobe"></div>
+        </div>
+      </div>
+      <div class="face">
+        <div class="eyes">
+          <div class="eye">
+            <div class="eyelid"></div>
+          </div>
+          <div class="eye">
+            <div class="eyelid"></div>
+          </div>
+        </div>
+        <div class="nose"></div>
+        <div class="mouth"></div>
+      </div>
+    </div>
+    <div class="chest">
+      <div class="fur">
+        <div class="patch"></div>
+      </div>
+      <div class="fur">
+        <div class="patch"></div>
+      </div>
+      <div class="fur">
+        <div class="patch"></div>
+      </div>
+    </div>
+    <div class="legs">
+      <div class="leg">
+        <div class="inner-leg"></div>
+      </div>
+      <div class="leg">
+        <div class="inner-leg"></div>
+      </div>
+      <div class="leg">
+        <div class="inner-leg"></div>
+      </div>
+      <div class="leg">
+        <div class="inner-leg"></div>
+      </div>
+    </div>
+    <div class="tail">
+      <div class="tail">
+        <div class="tail">
+          <div class="tail">
+            <div class="tail">
+              <div class="tail -end"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</script>
+</section>
+
+
+<section>
+    <h2>Site of the month</h2>
+    <ul>
+        <li><a href="https://twitter.com/internetofshit?lang=en" target="_blank">The internet of $h1t</a></li>
+    </ul>
+</section>
+
+<section>
+    <h2>Thanks for coming!</h2>
+    <p>
+        If you are interested in presenting a lightning talk, please let me know for next month.
+    </p>
+</section>
+
+</div>
+
+</div>
+
+<!-- Setup reveal -->
+<script src="resource/revealjs/lib/js/head.min.js"></script>
+<script src="resource/revealjs/js/reveal.js"></script>
+
+<script>
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: false,
+            history: true,
+            center: true,
+            // available themes are in /css/theme
+            theme: Reveal.getQueryHash().theme,
+            transition: Reveal.getQueryHash().transition || 'default',
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'resource/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: 'resource/revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'resource/revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //  We use prism and syntaxify.
+                //{ src: 'resource/revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: 'resource/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                { src: 'resource/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+        // Reveal.addEventListener( 'slidechanged', function( event ) {
+        //  console.log(event.previousSlide, event.currentSlide, event.indexh, event.indexv);
+        // } );
+</script>
+
+<script>
+    //  Setup sequence diagrams
+    $(".diagram").sequenceDiagram({theme: 'hand'});
+</script>
+
+
+<script>
+    //  Muck about with the logo a little, why not :)
+    var setLogoWidth = function(){
+        var width = 40 + parseInt(Math.random() * 40, 10);
+        $('#logo,#logoEvil').css({width: width + "%"});
+    };
+
+    setInterval(setLogoWidth, 5000);
+</script>
+
+
+<link rel="stylesheet" href="resource/other/eevee.css">
+
+</body>
+</html>
